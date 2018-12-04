@@ -30,4 +30,39 @@ public class TaskService {
         task.setDescription("Error trying to retrieve data from datasource");
         return Collections.singletonList(task);
     }
+
+    @HystrixCommand(fallbackMethod = "saveTaskFallBack")
+    public Task saveTask(Task task){
+        return taskRepository.save(task);
+    }
+
+    public Task saveTaskFallBack(Task task){
+        task.setDescription("Error saving task");
+
+        return task;
+    }
+
+    @HystrixCommand(fallbackMethod = "updateTaskFallBack")
+    public Task updateTask(Task task){
+        return taskRepository.save(task);
+    }
+
+    public Task updateTaskFallBack(Task task){
+        task.setDescription("error during updating data");
+
+        return task;
+    }
+
+    @HystrixCommand(fallbackMethod = "deleteTaskFallBack")
+    public Task deleteTask(Task task){
+        taskRepository.delete(task);
+
+        return task;
+    }
+
+    public Task deleteTaskFallBack(Task task){
+        task.setDescription("Error during deleting data");
+
+        return task;
+    }
 }
